@@ -9,7 +9,9 @@
 import UIKit
 
 class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout  {
+    
     var horizontalBarLeftAnchorConstraint: NSLayoutConstraint?
+    var demoController : DemoApplicationController?
   lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -22,6 +24,8 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     
     let cellId = "cellId"
     let titles = ["Users","Enroll"]
+    
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         collectionView.register(MenuCell.self, forCellWithReuseIdentifier: cellId)
@@ -32,6 +36,8 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
         collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .bottom)
         setupHorizontalBar()
     }
+    
+    
     func setupHorizontalBar() {
         let horizontalBarView = UIView()
         horizontalBarView.backgroundColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
@@ -46,13 +52,7 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(indexPath.item)
-        let x = CGFloat(indexPath.item) * frame.width / 2
-        horizontalBarLeftAnchorConstraint?.constant = x
-
-        UIView.animate(withDuration: 0.75, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.layoutIfNeeded()
-        }, completion: nil)
+        demoController?.scrollToMenuIndex(menuIndex: indexPath.item)
     }
     
     required init?(coder: NSCoder) {

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+
 
 class BaseCell: UICollectionViewCell {
     override init(frame: CGRect) {
@@ -23,8 +25,12 @@ class BaseCell: UICollectionViewCell {
     }
 }
 
+
+
+
 class UsersCell: BaseCell {
     
+    let deleteData = FeedCell()
     let thumbnailImage : UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = UIColor.blue
@@ -62,31 +68,42 @@ class UsersCell: BaseCell {
         textView.text = "Female | 25 | New York"
         textView.textContainerInset = UIEdgeInsets(top: -3, left: -4, bottom:  0, right: 0)
         textView.textColor = .lightGray
-        textView.font = UIFont(name: "HelveticaNeue", size: 16)
+        textView.font = UIFont(name: "HelveticaNeue", size: 14)
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()
     
-    let deleteView : UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "delete")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
+    let deleteButton : UIButton = {
+        let image = UIImage(named: "delete") as UIImage?
+        let button   = UIButton(type: UIButton.ButtonType.custom) as UIButton
+        button.frame = CGRect(x: 100, y: 100, width: 100, height: 100)
+        button.setImage(image, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
+    
+    @IBAction func btnTouched() -> Void {
+      
+        deleteData.deleteUserData()
+        
+    }
+
     override func setupViews() {
         addSubview(thumbnailImage)
         addSubview(seperatorView)
         addSubview(userProfileImageView)
         addSubview(titleLabel)
         addSubview(subtitleTextView)
-        addSubview(deleteView)
+        addSubview(deleteButton)
         
+        
+        deleteButton.addTarget(self, action: #selector(btnTouched), for: UIControl.Event.touchUpInside)
         //horizontal
-        addConstraintsWithFormat("H:|-16-[v0(54)]-8-[v1(\(frameWidth-146))]-8-[v2(34)]-16-|", views: userProfileImageView,titleLabel,deleteView)
+        addConstraintsWithFormat("H:|-16-[v0(54)]-8-[v1(\(frameWidth-146))]-8-[v2(34)]-16-|", views: userProfileImageView,titleLabel,deleteButton)
 //        //vertical
         addConstraintsWithFormat("V:|-16-[v0(54)]-[v1(1)]|", views: userProfileImageView,seperatorView)
         addConstraintsWithFormat("V:|-16-[v0(20)]|", views: titleLabel)
-        addConstraintsWithFormat("V:|-16-[v0(34)]", views: deleteView)
+        addConstraintsWithFormat("V:|-16-[v0(34)]", views: deleteButton)
         addConstraintsWithFormat("H:|[v0]|", views: seperatorView)
         
         //top constraint
