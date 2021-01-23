@@ -12,6 +12,7 @@ import Firebase
 class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
   
     let db = Firestore.firestore()
+    var documentdata = ""
     lazy var collectionView : UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -46,11 +47,15 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
                 if let snapshotDocuments = querySnapshot?.documents {
                     for doc in snapshotDocuments {
                         let data = doc.data()
+                        let documentId = doc.documentID
+                        self.documentdata = documentId
                         if let Fnamedata = data["First Name"] as? String,let Lnamedata = data["Last Name"] as? String,let DOBdata = data["Date of Birth"] as? String,let genderdata = data["Gender"] as? String,let countrydata = data["Country"] as? String,let statedata = data["State"] as? String,let hometowndata = data["HomeTown"] as? String,let phnumberdata = data["PhoneNumber"] as? String,let telnumberdata = data["Telephone Number"] as? String {
                             let NewDataFile = DataFile(FirstName: Fnamedata, LastName: Lnamedata, Dateofbirth: DOBdata, Gender: genderdata, countrydata: countrydata, statedata: statedata, homeTowndata: hometowndata, phoneNumberdata: phnumberdata, telephoneNumberdata: telnumberdata)
-                            self.dataFile.append(NewDataFile)
+                                self.dataFile.append(NewDataFile)
+    
                             DispatchQueue.main.async {
                                 self.collectionView.reloadData()
+                                print(documentId)
                             }
                         }
                     }
@@ -59,10 +64,7 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
         }
         
     }
-    
-    func deleteUserData() {
-        db.collection("userdata").document("data").delete()
-    }
+
     
      func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataFile.count
@@ -76,6 +78,7 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
         cell.subtitleTextView.text = dataFile[indexPath.item].Gender
         cell.subtitleTextView.text.append(" | \(dataFile[indexPath.item].Age()) |")
         cell.subtitleTextView.text.append(" \(dataFile[indexPath.item].homeTowndata)")
+        
         return cell
     }
     
@@ -87,4 +90,5 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
     }
+    
 }

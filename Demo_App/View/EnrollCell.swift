@@ -14,9 +14,10 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
     let template = UIView(frame: CGRect(x: 10, y: 10, width: 50, height: 50))
     let labels = ["First Name","Last Name","Date of birth","Gender","Country","State","Home Town","Phone Number","Telephone Number"]
 
-    let db = Firestore.firestore()
     
     var dataFile : [DataFile] = []
+    var cell = FeedCell()
+    
     @IBAction func editButtonTapped() -> Void {
         print(FirstLabel.text!)
         print(SecondLabel.text!)
@@ -50,6 +51,50 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
 
        }
 
+    @IBAction func editProfilePhoto() -> Void {
+        print(123)
+        let controller = UIViewController()
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+
+        let actionSheet = UIAlertController(title: "Photo Source", message: "Choose a Source", preferredStyle: .actionSheet)
+
+        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (action: UIAlertAction) in
+
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+        imagePickerController.sourceType = .camera
+            controller.present(imagePickerController, animated: true, completion: nil)
+        } else {
+        print("Camera is not available.")
+        }
+
+        }))
+
+        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (action: UIAlertAction) in
+        imagePickerController.sourceType = .photoLibrary
+            controller.present(imagePickerController, animated: true, completion: nil)
+        }))
+
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+
+            controller.present(actionSheet, animated: true, completion: nil)
+
+        }
+    
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+
+            profileIG.image = image
+
+        picker.dismiss(animated: true, completion: nil)
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            
+        picker.dismiss(animated: true, completion: nil)
+            
+    }
+    
     let profileIG : UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "1")
@@ -59,13 +104,13 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         return imageView
     }()
     
-    let TLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Select Profile Photo"
-        label.textColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
-        label.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    let setProfilePhoto: UIButton = {
+        let profile = UIButton()
+        profile.setTitle("Select Profile Photo", for: .normal)
+        profile.setTitleColor(UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00), for: .normal)
+        profile.titleLabel?.font = UIFont(name: "HelveticaNeue-Bold", size: 16)
+        profile.translatesAutoresizingMaskIntoConstraints = false
+        return profile
     }()
     
     let UserDataButton : UIButton = {
@@ -234,9 +279,9 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
 
     
     override func setupViews() {
-//        addSubview(collectionView)
+        
         addSubview(profileIG)
-        addSubview(TLabel)
+        addSubview(setProfilePhoto)
         addSubview(UserDataButton)
         addSubview(FirstLabel)
         addSubview(SecondLabel)
@@ -248,21 +293,18 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         addSubview(EightLabel)
         addSubview(NinLabel)
         template.backgroundColor = .white
-        TLabel.backgroundColor = .white
+        setProfilePhoto.backgroundColor = .white
         UserDataButton.addTarget(self, action: #selector(editButtonTapped), for: UIControl.Event.touchUpInside)
-        
+        setProfilePhoto.addTarget(self, action: #selector(editProfilePhoto), for: UIControl.Event.touchUpInside)
 
-//        addConstraintsWithFormat("H:|[v0]|", views: collectionView)
-//        addConstraintsWithFormat("V:|[v0(\(frame.height - 30))]|", views: collectionView)
-
-    
+       
         addConstraintsWithFormat("H:|-150-[v0(100)]-150-|", views: profileIG)
         addConstraintsWithFormat("V:|-50-[v0(100)]-16-|", views: profileIG)
         print(frame.width)
         
         
-        addConstraintsWithFormat("H:|-125-[v0(\(frame.width/2))]|", views: TLabel)
-        addConstraintsWithFormat("V:|-150-[v0(35)]|", views: TLabel)
+        addConstraintsWithFormat("H:|-105-[v0(\(frame.width/2))]|", views: setProfilePhoto)
+        addConstraintsWithFormat("V:|-150-[v0(35)]|", views: setProfilePhoto)
 
      
 
@@ -297,57 +339,6 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         addConstraintsWithFormat("H:|[v0]|", views: UserDataButton)
         addConstraintsWithFormat("V:|-(\(frame.height - 50))-[v0]|", views: UserDataButton)
         
-        
-        
-////        collectionView.register(enrollCell.self, forCellWithReuseIdentifier: cellIdenroll)
-//        collectionView.contentInset = UIEdgeInsets(top: 130, left: 0, bottom: 0, right: 0)
-//        collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 130, left: 0, bottom: 0, right: 0)
-     }
-//    func numberOfSections(in collectionView: UICollectionView) -> Int {
-//        return 1
-//    }
-//   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 9
-//    }
 
-// func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdenroll, for: indexPath) as! enrollCell
-//    cell.label.placeholder = labels[indexPath.item]
-//    UserDataButton.addTarget(self, action: #selector(editButtonTapped), for: UIControl.Event.touchUpInside)
-//       return cell
-//   }
-//  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//       frameWidth = Int(frame.width)
-//    return CGSize(width: frame.width, height: frame.height / 11)
-//   }
-// func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//       return 0
-//   }
-//}
-
-//class enrollCell : BaseCell {
-//    override func setupViews() {
-//        addSubview(label)
-//        addConstraintsWithFormat("H:|-16-[v0(\(frame.width - 32))]-16-|", views: label)
-//        addConstraintsWithFormat("V:|[v0(39)]|", views: label)
-//
-//    }
-//    let label : UITextField = {
-//        let lb = UITextField()
-//        let myColor : UIColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
-//        lb.placeholder = "First Name"
-//        lb.textColor = .lightGray
-//        lb.borderStyle = .line
-//        lb.layer.borderColor = myColor.cgColor
-//        lb.layer.borderWidth = 1
-//        lb.layer.cornerRadius = 5
-//        lb.layer.masksToBounds = true
-//        lb.keyboardAppearance = .default
-//        lb.font = UIFont(name: "HelveticaNeue", size: 16)
-//        lb.translatesAutoresizingMaskIntoConstraints = false
-//        return lb
-//    }()
-//}
-//
-//
+}
 }

@@ -23,6 +23,7 @@ class BaseCell: UICollectionViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+ 
 }
 
 
@@ -30,7 +31,8 @@ class BaseCell: UICollectionViewCell {
 
 class UsersCell: BaseCell {
     
-    let deleteData = FeedCell()
+    let db = Firestore.firestore()
+    let feedCell = FeedCell()
     let thumbnailImage : UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = UIColor.blue
@@ -83,10 +85,19 @@ class UsersCell: BaseCell {
     }()
     
     @IBAction func btnTouched() -> Void {
-      
-        deleteData.deleteUserData()
+        
+        db.collection("userdata").document("\(feedCell.documentdata)").delete(){ err in
+            if let err = err {
+                print("Error removing document: \(err)")
+            } else {
+                print("Document successfully removed!")
+//                }
+                
+            }
+        }
         
     }
+    
 
     override func setupViews() {
         addSubview(thumbnailImage)

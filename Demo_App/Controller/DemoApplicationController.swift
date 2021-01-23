@@ -10,12 +10,13 @@
 import UIKit
 
 var frameWidth = 0
-
+import Firebase
 class DemoApplicationController: UICollectionViewController, UICollectionViewDelegateFlowLayout{
     
-    
+
     let cellId = "cellId"
     let trendingCellId = "trendingCellId"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //title Label
@@ -27,7 +28,7 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
         titleLabel.textColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
         setupMenuBar()
         setupCollectionView()
-     
+    
     }
     
    
@@ -92,8 +93,9 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
         return CGSize(width: view.frame.width, height: view.frame.height - 60)
     }
     
-    
 }
 
+    
+    
 
 
