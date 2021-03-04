@@ -9,28 +9,23 @@
 import UIKit
 import Firebase
 
-
 class BaseCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
     }
-    
     func setupViews() {
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
- 
 }
-
-
-
 
 class UsersCell: BaseCell {
     
+    static let identifer = "UserCellKey"
     let db = Firestore.firestore()
     let feedCell = FeedCell()
     let thumbnailImage : UIImageView = {
@@ -91,14 +86,11 @@ class UsersCell: BaseCell {
                 print("Error removing document: \(err)")
             } else {
                 print("Document successfully removed!")
-//                }
-                
             }
         }
         
     }
     
-
     override func setupViews() {
         addSubview(thumbnailImage)
         addSubview(seperatorView)
@@ -106,24 +98,15 @@ class UsersCell: BaseCell {
         addSubview(titleLabel)
         addSubview(subtitleTextView)
         addSubview(deleteButton)
-        
-        
         deleteButton.addTarget(self, action: #selector(btnTouched), for: UIControl.Event.touchUpInside)
-        //horizontal
         addConstraintsWithFormat("H:|-16-[v0(54)]-8-[v1(\(frameWidth-146))]-8-[v2(34)]-16-|", views: userProfileImageView,titleLabel,deleteButton)
-//        //vertical
         addConstraintsWithFormat("V:|-16-[v0(54)]-[v1(1)]|", views: userProfileImageView,seperatorView)
         addConstraintsWithFormat("V:|-16-[v0(20)]|", views: titleLabel)
         addConstraintsWithFormat("V:|-16-[v0(34)]", views: deleteButton)
         addConstraintsWithFormat("H:|[v0]|", views: seperatorView)
-        
-        //top constraint
         addConstraint(NSLayoutConstraint(item: subtitleTextView, attribute: .top, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1, constant: 4))
-        // left constraint
         addConstraint(NSLayoutConstraint(item: subtitleTextView, attribute: .left, relatedBy: .equal, toItem: userProfileImageView, attribute: .right, multiplier: 1, constant: 8))
-        //right constraint
         addConstraint(NSLayoutConstraint(item: subtitleTextView, attribute: .right, relatedBy: .equal, toItem: titleLabel, attribute: .right, multiplier: 1, constant: 0))
-        //height constraint
         addConstraint(NSLayoutConstraint(item: subtitleTextView, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 0, constant: 20))
     }
     

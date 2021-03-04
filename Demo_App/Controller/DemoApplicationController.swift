@@ -8,19 +8,13 @@
 //
 
 import UIKit
-
-
-
 var frameWidth = 0
 import Firebase
 class DemoApplicationController: UICollectionViewController, UICollectionViewDelegateFlowLayout{
   
-    let cellId = "cellId"
-    let trendingCellId = "trendingCellId"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         //title Label
         navigationController?.navigationBar.isTranslucent = false
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: view.frame.width - 250, height: view.frame.height))
@@ -41,13 +35,12 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
     
    lazy var enroll: EnrollCell = {
         let en = EnrollCell()
-        en.demoController = self
+        en.delegate = self
         return en
     }()
     
     private func setupMenuBar() {
         view.addSubview(menuBar)
-        
         view.addConstraintsWithFormat("H:|[v0]|", views: menuBar)
         view.addConstraintsWithFormat("V:|[v0(50)]", views: menuBar)
     }
@@ -58,8 +51,8 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
             flowLayout.minimumLineSpacing = 0
         }
         collectionView?.backgroundColor = .white
-        collectionView.register(FeedCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView?.register(EnrollCell.self, forCellWithReuseIdentifier: trendingCellId)
+        collectionView.register(FeedCell.self, forCellWithReuseIdentifier: UsersCell.identifer)
+        collectionView?.register(EnrollCell.self, forCellWithReuseIdentifier: EnrollCell.identifier)
         collectionView?.contentInset = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 50, left: 0, bottom: 0, right: 0)
         collectionView.isPagingEnabled = true
@@ -88,9 +81,9 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UsersCell.identifer, for: indexPath)
         if indexPath.item == 1 {
-            return collectionView.dequeueReusableCell(withReuseIdentifier: trendingCellId, for: indexPath)
+            return collectionView.dequeueReusableCell(withReuseIdentifier: EnrollCell.identifier, for: indexPath)
         }
         return cell
     }
@@ -101,9 +94,9 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
     
 }
 
-extension DemoApplicationController : UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+extension DemoApplicationController : UIImagePickerControllerDelegate,UINavigationControllerDelegate,pickTheImageDelegate{
     
-  @objc func pickTheImage() {
+        func pickTheImage() {
         print(123)
         let vc = UIImagePickerController()
         vc.sourceType = .photoLibrary
@@ -115,7 +108,6 @@ extension DemoApplicationController : UIImagePickerControllerDelegate,UINavigati
             if let image = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
                 print("imagepicked")
                 enroll.profileIG.image=image
-               
             }
             dismiss(animated: true, completion: nil)
         }

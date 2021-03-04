@@ -12,14 +12,14 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     
     var horizontalBarLeftAnchorConstraint: NSLayoutConstraint?
     var demoController : DemoApplicationController?
-  lazy var collectionView: UICollectionView = {
+     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = UIColor.white
         cv.dataSource = self
         cv.delegate = self
         return cv
-    }()
+     }()
     
     
     let cellId = "cellId"

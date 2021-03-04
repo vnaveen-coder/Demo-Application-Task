@@ -11,19 +11,17 @@
 import UIKit
 import Firebase
 
-//protocol PickTheImageDelegate {
-//    func pickTheImage()
-//}
+protocol pickTheImageDelegate {
+    func pickTheImage()
+}
 
 class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
-    var demoController = DemoApplicationController()
-   let cellIdenroll = "cellIdenroll"
-    let template = UIView(frame: CGRect(x: 10, y: 10, width: 50, height: 50))
+    var delegate : pickTheImageDelegate?
+   static let identifier = "EnrollKey"
+    
     let labels = ["First Name","Last Name","Date of birth","Gender","Country","State","Home Town","Phone Number","Telephone Number"]
 
-
     var dataFile : [DataFile] = []
-    var cell = FeedCell()
     
     @IBAction func editButtonTapped() -> Void {
         print(FirstLabel.text!)
@@ -58,6 +56,9 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
 
        }
 
+    @IBAction func pickImage() {
+        delegate?.pickTheImage()
+    }
     
     let profileIG : UIImageView = {
         let imageView = UIImageView()
@@ -256,19 +257,14 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         addSubview(SeventhLabel)
         addSubview(EightLabel)
         addSubview(NinLabel)
-        template.backgroundColor = .white
         setProfilePhoto.backgroundColor = .white
         UserDataButton.addTarget(self, action: #selector(editButtonTapped), for: UIControl.Event.touchUpInside)
-        setProfilePhoto.addTarget(demoController.self, action: #selector(DemoApplicationController.pickTheImage), for: UIControl.Event.touchUpInside)
+        setProfilePhoto.addTarget(self, action: #selector(pickImage), for: UIControl.Event.touchUpInside)
         addConstraintsWithFormat("H:|-150-[v0(100)]-150-|", views: profileIG)
         addConstraintsWithFormat("V:|-50-[v0(100)]-16-|", views: profileIG)
-        print(frame.width)
-        
-        
+
         addConstraintsWithFormat("H:|-105-[v0(\(frame.width/2))]|", views: setProfilePhoto)
         addConstraintsWithFormat("V:|-150-[v0(35)]|", views: setProfilePhoto)
-
-     
 
         addConstraintsWithFormat("H:|-16-[v0(\(frame.width - 32))]-16-|", views: FirstLabel)
         addConstraintsWithFormat("V:|-(\(frame.width/2))-[v0(39)]|", views: FirstLabel,SecondLabel)
@@ -297,11 +293,8 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         addConstraintsWithFormat("H:|-16-[v0(\(frame.width - 32))]-16-|", views: NinLabel)
         addConstraintsWithFormat("V:|-(\(frame.width/2 * 3))-[v0(39)]|", views: NinLabel)
         
-        
         addConstraintsWithFormat("H:|[v0]|", views: UserDataButton)
         addConstraintsWithFormat("V:|-(\(frame.height - 50))-[v0]|", views: UserDataButton)
-        
-
 }
 }
 

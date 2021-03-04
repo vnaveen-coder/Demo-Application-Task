@@ -14,7 +14,7 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
     let db = Firestore.firestore()
     var documentdata = ""
     lazy var collectionView : UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = type(of: UICollectionViewFlowLayout()).init()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .white
         cv.dataSource = self
@@ -22,18 +22,16 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
         return cv
     }()
     
-    let cellId = "cellId"
     var profileImages : [String]  = ["1","2","3","4","5","6","7","8","9","10"]
     var dataFile : [DataFile] = []
     
     
         override  func setupViews() {
         super.setupViews()
-        
         addSubview(collectionView)
         addConstraintsWithFormat("H:|[v0]|", views: collectionView)
         addConstraintsWithFormat("V:|[v0]|", views: collectionView)
-        collectionView.register(UsersCell.self, forCellWithReuseIdentifier: cellId)
+            collectionView.register(UsersCell.self, forCellWithReuseIdentifier: UsersCell.identifer)
         loadUserData()
     }
     
@@ -72,7 +70,7 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
 
     
      func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! UsersCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UsersCell.identifer, for: indexPath) as! UsersCell
         cell.titleLabel.text = dataFile[indexPath.item].FirstName
         cell.titleLabel.text?.append(" \(dataFile[indexPath.item].LastName)")
         cell.subtitleTextView.text = dataFile[indexPath.item].Gender
