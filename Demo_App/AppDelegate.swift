@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 
+@available(iOS 13.0, *)
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -17,19 +18,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         window = UIWindow()
         window?.makeKeyAndVisible()
-        
+
         //get rid of shadow
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-        
-        let layout = UICollectionViewFlowLayout()
+
+        let layout = type(of: UICollectionViewFlowLayout()).init()
         window?.rootViewController = UINavigationController(rootViewController: DemoApplicationController(collectionViewLayout: layout))
         FirebaseApp.configure()
-        let db = Firestore.firestore()
-        print(db)
         return true
     }
-
+   
 
 }
 

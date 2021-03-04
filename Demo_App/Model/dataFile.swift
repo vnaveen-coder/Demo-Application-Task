@@ -18,6 +18,7 @@ struct DataFile {
     let homeTowndata : String
     let phoneNumberdata : String
     let telephoneNumberdata : String
+    
 //    let documentID : String
    
     func Age() -> Int {

@@ -6,15 +6,22 @@
 //  Copyright © 2021 com.NaveenVangalapudi. All rights reserved.
 //
 
+
+
 import UIKit
 import Firebase
 
-class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+//protocol PickTheImageDelegate {
+//    func pickTheImage()
+//}
+
+class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
+    var demoController = DemoApplicationController()
    let cellIdenroll = "cellIdenroll"
     let template = UIView(frame: CGRect(x: 10, y: 10, width: 50, height: 50))
     let labels = ["First Name","Last Name","Date of birth","Gender","Country","State","Home Town","Phone Number","Telephone Number"]
 
-    
+
     var dataFile : [DataFile] = []
     var cell = FeedCell()
     
@@ -51,53 +58,11 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
 
        }
 
-    @IBAction func editProfilePhoto() -> Void {
-        print(123)
-        let controller = UIViewController()
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = self
-
-        let actionSheet = UIAlertController(title: "Photo Source", message: "Choose a Source", preferredStyle: .actionSheet)
-
-        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (action: UIAlertAction) in
-
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-        imagePickerController.sourceType = .camera
-            controller.present(imagePickerController, animated: true, completion: nil)
-        } else {
-        print("Camera is not available.")
-        }
-
-        }))
-
-        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (action: UIAlertAction) in
-        imagePickerController.sourceType = .photoLibrary
-            controller.present(imagePickerController, animated: true, completion: nil)
-        }))
-
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-
-            controller.present(actionSheet, animated: true, completion: nil)
-
-        }
-    
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        let image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-
-            profileIG.image = image
-
-        picker.dismiss(animated: true, completion: nil)
-        }
-
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            
-        picker.dismiss(animated: true, completion: nil)
-            
-    }
     
     let profileIG : UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "1")
+//        imageView.image = UIImage(named: "1")
+        imageView.backgroundColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
         imageView.layer.cornerRadius=22
         imageView.layer.masksToBounds=true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -279,7 +244,6 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
 
     
     override func setupViews() {
-        
         addSubview(profileIG)
         addSubview(setProfilePhoto)
         addSubview(UserDataButton)
@@ -295,9 +259,7 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         template.backgroundColor = .white
         setProfilePhoto.backgroundColor = .white
         UserDataButton.addTarget(self, action: #selector(editButtonTapped), for: UIControl.Event.touchUpInside)
-        setProfilePhoto.addTarget(self, action: #selector(editProfilePhoto), for: UIControl.Event.touchUpInside)
-
-       
+        setProfilePhoto.addTarget(demoController.self, action: #selector(DemoApplicationController.pickTheImage), for: UIControl.Event.touchUpInside)
         addConstraintsWithFormat("H:|-150-[v0(100)]-150-|", views: profileIG)
         addConstraintsWithFormat("V:|-50-[v0(100)]-16-|", views: profileIG)
         print(frame.width)
@@ -342,3 +304,5 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
 
 }
 }
+
+
