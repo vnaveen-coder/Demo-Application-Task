@@ -19,6 +19,7 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
     var delegate : pickTheImageDelegate?
    static let identifier = "EnrollKey"
     
+    var demoController : DemoApplicationController?
     let labels = ["First Name","Last Name","Date of birth","Gender","Country","State","Home Town","Phone Number","Telephone Number"]
 
     var dataFile : [DataFile] = []
@@ -258,7 +259,7 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         addSubview(NinLabel)
         setProfilePhoto.backgroundColor = .white
         UserDataButton.addTarget(self, action: #selector(editButtonTapped), for: UIControl.Event.touchUpInside)
-        setProfilePhoto.addTarget(self, action: #selector(pickImage), for: UIControl.Event.touchUpInside)
+        setProfilePhoto.addTarget(demoController, action: #selector(DemoApplicationController.pickTheImage), for: UIControl.Event.touchUpInside)
         addConstraintsWithFormat("H:|-150-[v0(100)]-150-|", views: profileIG)
         addConstraintsWithFormat("V:|-50-[v0(100)]-16-|", views: profileIG)
 

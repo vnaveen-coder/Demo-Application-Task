@@ -11,8 +11,9 @@ import UIKit
 var frameWidth = 0
 import Firebase
 class DemoApplicationController: UICollectionViewController, UICollectionViewDelegateFlowLayout{
-  
     
+    var enroll : EnrollCell?
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         //title Label
@@ -22,6 +23,7 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
         titleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
         navigationItem.titleView = titleLabel
         titleLabel.textColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
+        enroll?.delegate=self
         setupMenuBar()
         setupCollectionView()
     }
@@ -29,16 +31,10 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
 
    lazy var menuBar: MenuBar = {
         let mb = MenuBar()
-    mb.demoController = self
+         mb.demoController = self
         return mb
     }()
     
-   lazy var enroll: EnrollCell = {
-        let en = EnrollCell()
-        en.delegate = self
-        return en
-    }()
-
     private func setupMenuBar() {
         view.addSubview(menuBar)
         view.addConstraintsWithFormat("H:|[v0]|", views: menuBar)
@@ -94,9 +90,10 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
     
 }
 
+
 extension DemoApplicationController : UIImagePickerControllerDelegate,UINavigationControllerDelegate,pickTheImageDelegate{
     
-        func pickTheImage() {
+    @objc func pickTheImage() {
         print(123)
         let vc = UIImagePickerController()
         vc.sourceType = .photoLibrary
@@ -107,7 +104,7 @@ extension DemoApplicationController : UIImagePickerControllerDelegate,UINavigati
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let image = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
                 print("imagepicked")
-                enroll.profileIG.image=image
+                enroll?.profileIG.image=image
             }
             dismiss(animated: true, completion: nil)
         }
