@@ -242,7 +242,6 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         cv.delegate = self
         return cv
     }()
-
     
     override func setupViews() {
         addSubview(profileIG)

@@ -29,7 +29,7 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
 
    lazy var menuBar: MenuBar = {
         let mb = MenuBar()
-        mb.demoController = self
+    mb.demoController = self
         return mb
     }()
     
@@ -38,7 +38,7 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
         en.delegate = self
         return en
     }()
-    
+
     private func setupMenuBar() {
         view.addSubview(menuBar)
         view.addConstraintsWithFormat("H:|[v0]|", views: menuBar)
