@@ -8,5 +8,6 @@ target 'Demo_App' do
   # Pods for Demo_App
 pod 'Firebase/Firestore'
 pod 'FirebaseFirestoreSwift'
+pod 'Firebase/Storage'
 
 end

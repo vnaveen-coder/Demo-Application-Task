@@ -34,40 +34,59 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         print(SeventhLabel.text!)
         print(EightLabel.text!)
         print(NinLabel.text!)
-        if let FirstLabelText = FirstLabel.text, let SecondLabelText = SecondLabel.text,let ThirdLabelText = ThirdLabel.text,let FourthLabelText = FourthLabel.text,let FifthLabelText = FifthLabel.text,let SixthLabelText = SixthLabel.text,let SeventhLabelText = SeventhLabel.text,let EightLabelText = EightLabel.text,let NinLabelText = NinLabel.text {
-            db.collection("userdata").addDocument(data: ["First Name" : FirstLabelText,"Last Name" : SecondLabelText,"Date of Birth" : ThirdLabelText,"Gender" : FourthLabelText,"Country" : FifthLabelText,"State" : SixthLabelText,"HomeTown" : SeventhLabelText,"PhoneNumber" : EightLabelText,"Telephone Number" : NinLabelText,"date" : Date().timeIntervalSince1970]) { (error) in
-                if let e = error {
-                    print("There was a issue in saving data to firestore \(e)")
-                }else {
-                    print("successfully saved data")
+        
+        
+        let randomUID = UUID.init().uuidString
+        let storageRef = Storage.storage().reference(withPath: "images/\(randomUID).jpg")
+        guard  let uploadData = profileIG.image?.jpegData(compressionQuality: 0.75) else { return }
+        storageRef.putData(uploadData, metadata: nil) { (downloadMetadata, error) in
+            if let error = error {
+                print("\(error.localizedDescription)")
+            }else{
+                print("\(String(describing: downloadMetadata))")
+                storageRef.downloadURL { [self] (url, error) in
+                    if let error = error {
+                        print("got error at downloading data \(error.localizedDescription)")
+                    }
+                    if let url = url{
+                        if let FirstLabelText = self.FirstLabel.text, let SecondLabelText = self.SecondLabel.text,let ThirdLabelText = self.ThirdLabel.text,let FourthLabelText = self.FourthLabel.text,let FifthLabelText = self.FifthLabel.text,let SixthLabelText = self.SixthLabel.text,let SeventhLabelText = self.SeventhLabel.text,let EightLabelText = self.EightLabel.text,let NinLabelText = self.NinLabel.text, let profileImageURL = url.absoluteString as? String {
+                            self.db.collection("userdata").addDocument(data: ["First Name" : FirstLabelText,"Last Name" : SecondLabelText,"Date of Birth" : ThirdLabelText,"Gender" : FourthLabelText,"Country" : FifthLabelText,"State" : SixthLabelText,"HomeTown" : SeventhLabelText,"PhoneNumber" : EightLabelText,"Telephone Number" : NinLabelText, "ProfileURL" : profileImageURL,"date" : Date().timeIntervalSince1970]) { (error) in
+                                if let e = error {
+                                    print("There was a issue in saving data to firestore \(e)")
+                                }else {
+                                    print("successfully saved data")
+                                }
+                            }
+                            
+                        }
+                        FirstLabel.text = ""
+                        SecondLabel.text = ""
+                        ThirdLabel.text = ""
+                        FourthLabel.text = ""
+                        FifthLabel.text = ""
+                        SixthLabel.text = ""
+                        SeventhLabel.text = ""
+                        EightLabel.text = ""
+                        NinLabel.text =  ""
+                    }
                 }
             }
-            
         }
-        
-        FirstLabel.text = ""
-        SecondLabel.text = ""
-        ThirdLabel.text = ""
-        FourthLabel.text = ""
-        FifthLabel.text = ""
-        SixthLabel.text = ""
-        SeventhLabel.text = ""
-        EightLabel.text = ""
-        NinLabel.text =  ""
-
        }
-
+    
+    
     @IBAction func pickImage() {
         delegate?.pickTheImage()
     }
-    
-    let profileIG : UIImageView = {
+
+        let profileIG : UIImageView = {
         let imageView = UIImageView()
-//        imageView.image = UIImage(named: "1")
         imageView.backgroundColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
+        imageView.image = UIImage(named: "1")
         imageView.layer.cornerRadius=22
         imageView.layer.masksToBounds=true
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
     
@@ -297,5 +316,3 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         addConstraintsWithFormat("V:|-(\(frame.height - 50))-[v0]|", views: UserDataButton)
 }
 }
-
-

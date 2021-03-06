@@ -8,12 +8,10 @@
 //
 
 import UIKit
-var frameWidth = 0
 import Firebase
 class DemoApplicationController: UICollectionViewController, UICollectionViewDelegateFlowLayout{
     
-    var enroll : EnrollCell?
- 
+    var pickedImage = UIImage()
     override func viewDidLoad() {
         super.viewDidLoad()
         //title Label
@@ -23,7 +21,7 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
         titleLabel.font = UIFont(name: "HelveticaNeue-Bold", size: 20)
         navigationItem.titleView = titleLabel
         titleLabel.textColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
-        enroll?.delegate=self
+        enroll.delegate=self
         setupMenuBar()
         setupCollectionView()
     }
@@ -35,6 +33,11 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
         return mb
     }()
     
+    lazy var enroll: EnrollCell = {
+         let en = EnrollCell()
+          en.delegate = self
+         return en
+     }()
     private func setupMenuBar() {
         view.addSubview(menuBar)
         view.addConstraintsWithFormat("H:|[v0]|", views: menuBar)
@@ -80,6 +83,7 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UsersCell.identifer, for: indexPath)
         if indexPath.item == 1 {
             return collectionView.dequeueReusableCell(withReuseIdentifier: EnrollCell.identifier, for: indexPath)
+                
         }
         return cell
     }
@@ -92,27 +96,24 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
 
 
 extension DemoApplicationController : UIImagePickerControllerDelegate,UINavigationControllerDelegate,pickTheImageDelegate{
-    
+
     @objc func pickTheImage() {
-        print(123)
         let vc = UIImagePickerController()
         vc.sourceType = .photoLibrary
         vc.delegate = self
         vc.allowsEditing = true
         present(vc, animated: true, completion: nil)
-        
+    }
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let image = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
-                print("imagepicked")
-                enroll?.profileIG.image=image
+            if let imagePicked = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
+//                pickedImage = imagePicked
+                enroll.profileIG.image=imagePicked
             }
             dismiss(animated: true, completion: nil)
         }
         func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
             dismiss(animated: true, completion: nil)
         }
-    }
-   
 }
     
 

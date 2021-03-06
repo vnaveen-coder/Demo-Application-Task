@@ -47,8 +47,8 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
                         let data = doc.data()
                         let documentId = doc.documentID
                         self.documentdata = documentId
-                        if let Fnamedata = data["First Name"] as? String,let Lnamedata = data["Last Name"] as? String,let DOBdata = data["Date of Birth"] as? String,let genderdata = data["Gender"] as? String,let countrydata = data["Country"] as? String,let statedata = data["State"] as? String,let hometowndata = data["HomeTown"] as? String,let phnumberdata = data["PhoneNumber"] as? String,let telnumberdata = data["Telephone Number"] as? String {
-                            let NewDataFile = DataFile(FirstName: Fnamedata, LastName: Lnamedata, Dateofbirth: DOBdata, Gender: genderdata, countrydata: countrydata, statedata: statedata, homeTowndata: hometowndata, phoneNumberdata: phnumberdata, telephoneNumberdata: telnumberdata)
+                        if let Fnamedata = data["First Name"] as? String,let Lnamedata = data["Last Name"] as? String,let DOBdata = data["Date of Birth"] as? String,let genderdata = data["Gender"] as? String,let countrydata = data["Country"] as? String,let statedata = data["State"] as? String,let hometowndata = data["HomeTown"] as? String,let phnumberdata = data["PhoneNumber"] as? String,let telnumberdata = data["Telephone Number"] as? String,let URLdata = data["ProfileURL"] as? String{
+                            let NewDataFile = DataFile(FirstName: Fnamedata, LastName: Lnamedata, Dateofbirth: DOBdata, Gender: genderdata, countrydata: countrydata, statedata: statedata, homeTowndata: hometowndata, phoneNumberdata: phnumberdata, telephoneNumberdata: telnumberdata, ProfileURLdata: URLdata)
                                 self.dataFile.append(NewDataFile)
     
                             DispatchQueue.main.async {
@@ -76,7 +76,18 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
         cell.subtitleTextView.text = dataFile[indexPath.item].Gender
         cell.subtitleTextView.text.append(" | \(dataFile[indexPath.item].Age()) |")
         cell.subtitleTextView.text.append(" \(dataFile[indexPath.item].homeTowndata)")
-        
+        if let profileImageUrl = dataFile[indexPath.row].ProfileURLdata as? String {
+            let url = NSURL(string: profileImageUrl)
+            URLSession.shared.dataTask(with: url! as URL) { (data, response, error) in
+                if let error = error {
+                    print("error at loading images \(error)")
+                }
+                DispatchQueue.main.async {
+                    cell.userProfileImageView.image = UIImage(data: data!)
+                    print("data is being loaded")
+                }
+            }.resume()
+        }
         return cell
     }
     

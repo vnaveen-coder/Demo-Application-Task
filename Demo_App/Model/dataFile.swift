@@ -18,6 +18,7 @@ struct DataFile {
     let homeTowndata : String
     let phoneNumberdata : String
     let telephoneNumberdata : String
+    let ProfileURLdata : String
     
 //    let documentID : String
    
