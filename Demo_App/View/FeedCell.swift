@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 
 class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
-  
+    
     let db = Firestore.firestore()
     var documentdata = ""
     lazy var collectionView : UICollectionView = {
@@ -22,16 +22,15 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
         return cv
     }()
     
-    var profileImages : [String]  = ["1","2","3","4","5","6","7","8","9","10"]
     var dataFile : [DataFile] = []
     
     
-        override  func setupViews() {
+    override  func setupViews() {
         super.setupViews()
         addSubview(collectionView)
         addConstraintsWithFormat("H:|[v0]|", views: collectionView)
         addConstraintsWithFormat("V:|[v0]|", views: collectionView)
-            collectionView.register(UsersCell.self, forCellWithReuseIdentifier: UsersCell.identifer)
+        collectionView.register(UsersCell.self, forCellWithReuseIdentifier: UsersCell.identifer)
         loadUserData()
     }
     
@@ -49,8 +48,8 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
                         self.documentdata = documentId
                         if let Fnamedata = data["First Name"] as? String,let Lnamedata = data["Last Name"] as? String,let DOBdata = data["Date of Birth"] as? String,let genderdata = data["Gender"] as? String,let countrydata = data["Country"] as? String,let statedata = data["State"] as? String,let hometowndata = data["HomeTown"] as? String,let phnumberdata = data["PhoneNumber"] as? String,let telnumberdata = data["Telephone Number"] as? String,let URLdata = data["ProfileURL"] as? String{
                             let NewDataFile = DataFile(FirstName: Fnamedata, LastName: Lnamedata, Dateofbirth: DOBdata, Gender: genderdata, countrydata: countrydata, statedata: statedata, homeTowndata: hometowndata, phoneNumberdata: phnumberdata, telephoneNumberdata: telnumberdata, ProfileURLdata: URLdata)
-                                self.dataFile.append(NewDataFile)
-    
+                            self.dataFile.append(NewDataFile)
+                            
                             DispatchQueue.main.async {
                                 self.collectionView.reloadData()
                                 print(documentId)
@@ -62,14 +61,14 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
         }
         
     }
-
     
-     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataFile.count
     }
-
     
-     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UsersCell.identifer, for: indexPath) as! UsersCell
         cell.titleLabel.text = dataFile[indexPath.item].FirstName
         cell.titleLabel.text?.append(" \(dataFile[indexPath.item].LastName)")

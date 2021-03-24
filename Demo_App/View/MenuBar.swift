@@ -12,14 +12,14 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     
     var horizontalBarLeftAnchorConstraint: NSLayoutConstraint?
     var demoController : DemoApplicationController?
-     lazy var collectionView: UICollectionView = {
+    lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = UIColor.white
         cv.dataSource = self
         cv.delegate = self
         return cv
-     }()
+    }()
     
     
     let cellId = "cellId"
@@ -29,7 +29,7 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     override init(frame: CGRect) {
         super.init(frame: frame)
         collectionView.register(MenuCell.self, forCellWithReuseIdentifier: cellId)
-      addSubview(collectionView)
+        addSubview(collectionView)
         addConstraintsWithFormat("H:|[v0]|", views: collectionView)
         addConstraintsWithFormat("V:|[v0]|", views: collectionView)
         let selectedIndexPath = IndexPath(item: 0, section: 0)
@@ -103,7 +103,7 @@ class MenuCell : BaseCell {
     }
     override func setupViews() {
         super.setupViews()
-       addSubview(useEnroll)
+        addSubview(useEnroll)
         addConstraint(NSLayoutConstraint(item: useEnroll, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
         addConstraint(NSLayoutConstraint(item: useEnroll, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
     }

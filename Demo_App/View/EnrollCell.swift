@@ -17,24 +17,13 @@ protocol pickTheImageDelegate {
 
 class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
     var delegate : pickTheImageDelegate?
-   static let identifier = "EnrollKey"
+    static let identifier = "EnrollKey"
     
     var demoController : DemoApplicationController?
-    let labels = ["First Name","Last Name","Date of birth","Gender","Country","State","Home Town","Phone Number","Telephone Number"]
-
+    
     var dataFile : [DataFile] = []
     
     @IBAction func editButtonTapped() -> Void {
-        print(FirstLabel.text!)
-        print(SecondLabel.text!)
-        print(ThirdLabel.text!)
-        print(FourthLabel.text!)
-        print(FifthLabel.text!)
-        print(SixthLabel.text!)
-        print(SeventhLabel.text!)
-        print(EightLabel.text!)
-        print(NinLabel.text!)
-        
         
         let randomUID = UUID.init().uuidString
         let storageRef = Storage.storage().reference(withPath: "images/\(randomUID).jpg")
@@ -68,21 +57,17 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
                         SeventhLabel.text = ""
                         EightLabel.text = ""
                         NinLabel.text =  ""
+                        profileIG.image = UIImage(named: "photo")
                     }
                 }
             }
         }
-       }
-    
-    
-    @IBAction func pickImage() {
-        delegate?.pickTheImage()
     }
-
-        let profileIG : UIImageView = {
+    
+    
+    let profileIG : UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
-        imageView.image = UIImage(named: "1")
+        imageView.image = UIImage(named: "user")
         imageView.layer.cornerRadius=22
         imageView.layer.masksToBounds=true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -172,7 +157,7 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         Fourthlb.translatesAutoresizingMaskIntoConstraints = false
         return Fourthlb
     }()
-
+    
     let FifthLabel : UITextField = {
         let Fifthlb = UITextField()
         let myColor : UIColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
@@ -188,7 +173,7 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         Fifthlb.translatesAutoresizingMaskIntoConstraints = false
         return Fifthlb
     }()
-
+    
     let SixthLabel : UITextField = {
         let Sixthlb = UITextField()
         let myColor : UIColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
@@ -204,7 +189,7 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         Sixthlb.translatesAutoresizingMaskIntoConstraints = false
         return Sixthlb
     }()
-
+    
     let SeventhLabel : UITextField = {
         let Seventhlb = UITextField()
         let myColor : UIColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
@@ -220,7 +205,7 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         Seventhlb.translatesAutoresizingMaskIntoConstraints = false
         return Seventhlb
     }()
-
+    
     let EightLabel : UITextField = {
         let Eightdlb = UITextField()
         let myColor : UIColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
@@ -236,7 +221,7 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         Eightdlb.translatesAutoresizingMaskIntoConstraints = false
         return Eightdlb
     }()
-
+    
     let NinLabel : UITextField = {
         let Ninlb = UITextField()
         let myColor : UIColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
@@ -252,16 +237,7 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         Ninlb.translatesAutoresizingMaskIntoConstraints = false
         return Ninlb
     }()
-
-   
-
-    lazy var collectionView : UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.backgroundColor = .white
-        cv.delegate = self
-        return cv
-    }()
+    
     
     override func setupViews() {
         addSubview(profileIG)
@@ -281,16 +257,16 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         setProfilePhoto.addTarget(demoController, action: #selector(DemoApplicationController.pickTheImage), for: UIControl.Event.touchUpInside)
         addConstraintsWithFormat("H:|-150-[v0(100)]-150-|", views: profileIG)
         addConstraintsWithFormat("V:|-50-[v0(100)]-16-|", views: profileIG)
-
+        
         addConstraintsWithFormat("H:|-105-[v0(\(frame.width/2))]|", views: setProfilePhoto)
         addConstraintsWithFormat("V:|-150-[v0(35)]|", views: setProfilePhoto)
-
+        
         addConstraintsWithFormat("H:|-16-[v0(\(frame.width - 32))]-16-|", views: FirstLabel)
         addConstraintsWithFormat("V:|-(\(frame.width/2))-[v0(39)]|", views: FirstLabel,SecondLabel)
         
         addConstraintsWithFormat("H:|-16-[v0(\(frame.width - 32))]-16-|", views: SecondLabel)
         addConstraintsWithFormat("V:|-(\(frame.width/2 * 1.25))-[v0(39)]|", views: SecondLabel)
-
+        
         addConstraintsWithFormat("H:|-16-[v0(\(frame.width - 32))]-16-|", views: ThirdLabel)
         addConstraintsWithFormat("V:|-(\(frame.width/2 * 1.5))-[v0(39)]|", views: ThirdLabel)
         
@@ -314,5 +290,5 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
         
         addConstraintsWithFormat("H:|[v0]|", views: UserDataButton)
         addConstraintsWithFormat("V:|-(\(frame.height - 50))-[v0]|", views: UserDataButton)
-}
+    }
 }

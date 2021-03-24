@@ -38,8 +38,6 @@ class UsersCell: BaseCell {
     
     let userProfileImageView : UIImageView = {
         let imageView = UIImageView()
-//        imageView.image = UIImage(named: "1")
-//        imageView.backgroundColor = UIColor(red: 0.12, green: 0.56, blue: 1.00, alpha: 1.00)
         imageView.layer.cornerRadius=22
         imageView.layer.masksToBounds=true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -112,7 +110,7 @@ class UsersCell: BaseCell {
         addConstraint(NSLayoutConstraint(item: subtitleTextView, attribute: .height, relatedBy: .equal, toItem: self, attribute: .height, multiplier: 0, constant: 20))
     }
     
-
+    
 }
 
 

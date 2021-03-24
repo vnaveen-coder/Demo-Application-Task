@@ -11,7 +11,7 @@ import UIKit
 import Firebase
 class DemoApplicationController: UICollectionViewController, UICollectionViewDelegateFlowLayout{
     
-    var pickedImage = UIImage()
+    var pickedImage : UIImage = UIImage(named: "photo")!
     override func viewDidLoad() {
         super.viewDidLoad()
         //title Label
@@ -26,18 +26,18 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
         setupCollectionView()
     }
     
-
-   lazy var menuBar: MenuBar = {
+    
+    lazy var menuBar: MenuBar = {
         let mb = MenuBar()
-         mb.demoController = self
+        mb.demoController = self
         return mb
     }()
     
     lazy var enroll: EnrollCell = {
-         let en = EnrollCell()
-          en.delegate = self
-         return en
-     }()
+        let en = EnrollCell()
+        en.delegate = self
+        return en
+    }()
     private func setupMenuBar() {
         view.addSubview(menuBar)
         view.addConstraintsWithFormat("H:|[v0]|", views: menuBar)
@@ -65,14 +65,14 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
         menuBar.horizontalBarLeftAnchorConstraint?.constant = scrollView.contentOffset.x / 2
-       
+        
     }
     
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let index = Int(targetContentOffset.pointee.x / view.frame.width)
         let indexPath = IndexPath(item: index, section: 0)
         menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-   
+        
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -82,8 +82,9 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UsersCell.identifer, for: indexPath)
         if indexPath.item == 1 {
-            return collectionView.dequeueReusableCell(withReuseIdentifier: EnrollCell.identifier, for: indexPath)
-                
+            let en =  collectionView.dequeueReusableCell(withReuseIdentifier: EnrollCell.identifier, for: indexPath) as! EnrollCell
+            en.profileIG.image = pickedImage
+            return en
         }
         return cell
     }
@@ -96,7 +97,7 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
 
 
 extension DemoApplicationController : UIImagePickerControllerDelegate,UINavigationControllerDelegate,pickTheImageDelegate{
-
+    
     @objc func pickTheImage() {
         let vc = UIImagePickerController()
         vc.sourceType = .photoLibrary
@@ -104,17 +105,17 @@ extension DemoApplicationController : UIImagePickerControllerDelegate,UINavigati
         vc.allowsEditing = true
         present(vc, animated: true, completion: nil)
     }
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let imagePicked = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
-//                pickedImage = imagePicked
-                enroll.profileIG.image=imagePicked
-            }
-            dismiss(animated: true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let imagePicked = info[.originalImage] as? UIImage {
+            pickedImage = imagePicked
+            self.collectionView.reloadData()
         }
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-            dismiss(animated: true, completion: nil)
-        }
+        dismiss(animated: true, completion: nil)
+    }
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
 }
-    
+
 
 
