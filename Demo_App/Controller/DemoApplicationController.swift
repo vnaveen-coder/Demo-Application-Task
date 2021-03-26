@@ -60,7 +60,6 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
     func scrollToMenuIndex(menuIndex: Int) {
         let indexPath = IndexPath(item: menuIndex, section: 0)
         collectionView?.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -72,7 +71,6 @@ class DemoApplicationController: UICollectionViewController, UICollectionViewDel
         let index = Int(targetContentOffset.pointee.x / view.frame.width)
         let indexPath = IndexPath(item: index, section: 0)
         menuBar.collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-        
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -106,7 +104,7 @@ extension DemoApplicationController : UIImagePickerControllerDelegate,UINavigati
         present(vc, animated: true, completion: nil)
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let imagePicked = info[.originalImage] as? UIImage {
+        if let imagePicked = info[.editedImage] as? UIImage {
             pickedImage = imagePicked
             self.collectionView.reloadData()
         }

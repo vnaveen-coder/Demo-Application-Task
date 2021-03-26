@@ -42,8 +42,6 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
                             self.db.collection("userdata").addDocument(data: ["First Name" : FirstLabelText,"Last Name" : SecondLabelText,"Date of Birth" : ThirdLabelText,"Gender" : FourthLabelText,"Country" : FifthLabelText,"State" : SixthLabelText,"HomeTown" : SeventhLabelText,"PhoneNumber" : EightLabelText,"Telephone Number" : NinLabelText, "ProfileURL" : profileImageURL,"date" : Date().timeIntervalSince1970]) { (error) in
                                 if let e = error {
                                     print("There was a issue in saving data to firestore \(e)")
-                                }else {
-                                    print("successfully saved data")
                                 }
                             }
                             

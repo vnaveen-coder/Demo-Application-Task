@@ -8,7 +8,8 @@
 
 import UIKit
 import Firebase
-
+var documentid : [QueryDocumentSnapshot]?
+var hit : Int?
 class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
     
     let db = Firestore.firestore()
@@ -42,17 +43,15 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
                 print("There was an issue in retrieving data from Firebase \(e)  ")
             }else {
                 if let snapshotDocuments = querySnapshot?.documents {
+                    documentid = snapshotDocuments
                     for doc in snapshotDocuments {
                         let data = doc.data()
-                        let documentId = doc.documentID
-                        self.documentdata = documentId
                         if let Fnamedata = data["First Name"] as? String,let Lnamedata = data["Last Name"] as? String,let DOBdata = data["Date of Birth"] as? String,let genderdata = data["Gender"] as? String,let countrydata = data["Country"] as? String,let statedata = data["State"] as? String,let hometowndata = data["HomeTown"] as? String,let phnumberdata = data["PhoneNumber"] as? String,let telnumberdata = data["Telephone Number"] as? String,let URLdata = data["ProfileURL"] as? String{
                             let NewDataFile = DataFile(FirstName: Fnamedata, LastName: Lnamedata, Dateofbirth: DOBdata, Gender: genderdata, countrydata: countrydata, statedata: statedata, homeTowndata: hometowndata, phoneNumberdata: phnumberdata, telephoneNumberdata: telnumberdata, ProfileURLdata: URLdata)
                             self.dataFile.append(NewDataFile)
                             
                             DispatchQueue.main.async {
                                 self.collectionView.reloadData()
-                                print(documentId)
                             }
                         }
                     }
@@ -62,12 +61,10 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
         
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataFile.count
     }
-    
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UsersCell.identifer, for: indexPath) as! UsersCell
         cell.titleLabel.text = dataFile[indexPath.item].FirstName
@@ -87,7 +84,34 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
                 }
             }.resume()
         }
+        cell.deleteButton.tag = indexPath.row
+        cell.deleteButton.addTarget(self, action: #selector(FeedCell.deletecell(sender:)), for: UIControl.Event.touchUpInside)
         return cell
+    }
+    
+    @objc func deletecell(sender : UIButton){
+        let hitpoint = sender.convert(CGPoint.zero, to: collectionView)
+        let hitindex : IndexPath = collectionView.indexPathForItem(at: hitpoint)!
+        hit =  hitindex.row
+        collectionView.performBatchUpdates {
+            collectionView.deleteItems(at: [hitindex])
+            dataFile.remove(at: hitindex.item)
+        } completion: { (finished) in
+            self.collectionView.reloadData()
+        }
+        if let documentdata = documentid {
+            for (assignIndex,docID) in documentdata.enumerated() {
+                if let hitvalue = hit {
+                    if assignIndex == hitvalue{
+                        db.collection("userdata").document("\(docID.documentID)").delete(){ err in
+                            if let err = err {
+                                print("Error removing document: \(err)")
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

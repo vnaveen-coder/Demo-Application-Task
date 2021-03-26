@@ -73,23 +73,12 @@ class UsersCell: BaseCell {
     let deleteButton : UIButton = {
         let image = UIImage(named: "delete") as UIImage?
         let button   = UIButton(type: UIButton.ButtonType.custom) as UIButton
-        button.frame = CGRect(x: 100, y: 100, width: 100, height: 100)
         button.setImage(image, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentMode = .scaleToFill
+        button.isEnabled = true
         return button
     }()
-    
-    @IBAction func btnTouched() -> Void {
-        
-        db.collection("userdata").document("\(feedCell.documentdata)").delete(){ err in
-            if let err = err {
-                print("Error removing document: \(err)")
-            } else {
-                print("Document successfully removed!")
-            }
-        }
-        
-    }
     
     override func setupViews() {
         addSubview(thumbnailImage)
@@ -98,7 +87,7 @@ class UsersCell: BaseCell {
         addSubview(titleLabel)
         addSubview(subtitleTextView)
         addSubview(deleteButton)
-        deleteButton.addTarget(self, action: #selector(btnTouched), for: UIControl.Event.touchUpInside)
+
         addConstraintsWithFormat("H:|-16-[v0(54)]-8-[v1(\(frameWidth-146))]-8-[v2(34)]-16-|", views: userProfileImageView,titleLabel,deleteButton)
         addConstraintsWithFormat("V:|-16-[v0(54)]-[v1(1)]|", views: userProfileImageView,seperatorView)
         addConstraintsWithFormat("V:|-16-[v0(20)]|", views: titleLabel)
