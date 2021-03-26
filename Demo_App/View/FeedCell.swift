@@ -35,7 +35,7 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
         loadUserData()
     }
     
-    
+    // Retrieving data from Firebase
     func loadUserData() {
         db.collection("userdata").order(by: "date", descending: true).addSnapshotListener { (querySnapshot, error) in
             self.dataFile = []
@@ -64,7 +64,9 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataFile.count
     }
-
+    
+    
+//Loading data into the UIComponents
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UsersCell.identifer, for: indexPath) as! UsersCell
         cell.titleLabel.text = dataFile[indexPath.item].FirstName
@@ -89,6 +91,7 @@ class FeedCell: BaseCell,UICollectionViewDataSource,UICollectionViewDelegate,UIC
         return cell
     }
     
+    //Delete Action in the User Cell
     @objc func deletecell(sender : UIButton){
         let hitpoint = sender.convert(CGPoint.zero, to: collectionView)
         let hitindex : IndexPath = collectionView.indexPathForItem(at: hitpoint)!

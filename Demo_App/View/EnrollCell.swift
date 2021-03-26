@@ -23,8 +23,8 @@ class EnrollCell: UsersCell,UICollectionViewDelegate,UICollectionViewDelegateFlo
     
     var dataFile : [DataFile] = []
     
+    //Uploading Data to the Firebase
     @IBAction func editButtonTapped() -> Void {
-        
         let randomUID = UUID.init().uuidString
         let storageRef = Storage.storage().reference(withPath: "images/\(randomUID).jpg")
         guard  let uploadData = profileIG.image?.jpegData(compressionQuality: 0.75) else { return }
